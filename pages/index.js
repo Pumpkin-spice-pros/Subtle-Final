@@ -31,7 +31,7 @@ export default function Home() {
 				.then((result) => {
 					setPosts(result.data);
 				});
-  },[])
+  },[supabase])
   
   useEffect( () => {
 

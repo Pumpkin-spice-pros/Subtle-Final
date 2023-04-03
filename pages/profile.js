@@ -51,7 +51,7 @@ export default function Profile() {
 					setProfile(result.data[0]);
 				}
 			});
-	}, [userId]);
+	}, [userId, supabase]);
 
 	function saveProfile() {
 		supabase
