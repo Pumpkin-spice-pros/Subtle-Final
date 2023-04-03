@@ -1,6 +1,6 @@
 import { resolve } from "styled-jsx/css";
 
-export async function uploadUserProfileImage(
+export async function uploadUserProfileimg(
     supabase, 
     userId,
     file,

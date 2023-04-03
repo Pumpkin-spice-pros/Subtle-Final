@@ -1,4 +1,4 @@
-import { uploadUserProfileImage } from "@/helpers/user";
+import { uploadUserProfileimg } from "@/helpers/user";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useState } from "react";
 
@@ -10,7 +10,7 @@ export default function Avatar ({size,url,editable,onChange}) {
         const file =ev.target.files?.[0];
         if(file) {
             setIsUploading(true)
-          await uploadUserProfileImage(supabase, session.user.id, file, 'avatars', 'avatar');
+          await uploadUserProfileimg(supabase, session.user.id, file, 'avatars', 'avatar');
             setIsUploading(false)  
           if (onChange) onChange();
         }
@@ -23,7 +23,7 @@ export default function Avatar ({size,url,editable,onChange}) {
     return(
         <div className={`${width} relative`}>
           <div className="rounded-full overflow-hidden ">
-          <img  src={url} alt="" className="w-full"/>
+          <img src={url} alt="" className="w-full"/>
           </div>
           {isUplaoding && (
             <div className="absolute inset-0 flex items -center bg-white opacity-60 rounded-full"> </div>

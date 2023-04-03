@@ -14,24 +14,10 @@ export default function Home() {
   const session = useSession();
   const [posts,setPosts] = useState([])
   const [profile,setProfile] =useState (null)
-  // function fetchPosts (){
-  //   supabase.from('posts')
-  //   .select('id,content, created_at, photos, profiles(id,avatar,name)')
-  //   .order('created_at', {ascending:false})
-  //   .then(result => {
-  //     setPosts(result.data);
-  //   })
-  // }
 
   useEffect( () => {
-			supabase
-				.from("posts")
-				.select("id,content, created_at, photos, profiles(id,avatar,name)")
-				.order("created_at", { ascending: false })
-				.then((result) => {
-					setPosts(result.data);
-				});
-  },[supabase])
+    fetchPosts();
+  },[])
   
   useEffect( () => {
 
@@ -46,8 +32,16 @@ export default function Home() {
             setProfile(result.data[0]);
         }
     })
-  }, [session?.user?.id, supabase]);
+  }, [session?.user?.id]);
 
+  function fetchPosts (){
+    supabase.from('posts')
+    .select('id,content, created_at, photos, profiles(id,avatar,name)')
+    .order('created_at', {ascending:false})
+    .then(result => {
+      setPosts(result.data);
+    })
+  }
 
 if(!session){
   return <LoginPage/>
