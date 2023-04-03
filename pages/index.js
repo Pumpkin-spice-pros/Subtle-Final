@@ -46,7 +46,7 @@ export default function Home() {
             setProfile(result.data[0]);
         }
     })
-  }, [session?.user?.id]);
+  }, [session?.user?.id, supabase]);
 
 
 if(!session){
