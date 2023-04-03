@@ -20,14 +20,6 @@ export default function Profile () {
     const userId= router.query.id;
   
     const supabase = useSupabaseClient();
-
-    useEffect(() => {
-        if (!userId){
-            return;
-        }
-        fetchUser();
-    },[userId])
-
     function fetchUser () {
         supabase.from('profiles')
         .select()
@@ -41,6 +33,14 @@ export default function Profile () {
             }
         })
     }
+
+    useEffect(() => {
+        if (!userId){
+            return;
+        }
+        fetchUser();
+    },[userId])
+
     function saveProfile (){
         supabase.from('profiles').update({
             name,
