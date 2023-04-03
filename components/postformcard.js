@@ -3,6 +3,7 @@ import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useContext,  useState } from "react";
 import Avatar from "./avatar";
 import Card from "./card";
+import { nanoid } from "nanoid"
 
 export default function PostFormCard({onPost}) {
     const [content,setContent] = useState ('');
@@ -66,7 +67,7 @@ export default function PostFormCard({onPost}) {
             {uploads.length > 0 && (
                 <div className=" flex gap-2">
                     {uploads.map(upload => (
-                        <div>
+                        <div key={nanoid()}>
                             <img src={upload} alt="" className="w-auto h-24 rounded-md mt-2"/>
                         </div>
                     ))}
