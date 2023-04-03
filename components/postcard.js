@@ -17,7 +17,7 @@ export default function PostCard ({id,content, photos, profiles:authorProfile}) 
 			.select()
 			.eq("post_id", id)
 			.then((result) => setLikes(result.data));
-  }, [supabase]);
+  }, [supabase, id]);
   
   // function fetchLikes() {
   //   supabase.from('likes')
