@@ -11,16 +11,21 @@ export default function PostCard ({id,content, photos, profiles:authorProfile}) 
     const supabase = useSupabaseClient();
 
   useEffect( () => {
-    fetchLikes();
-  }, []);
+    // fetchLikes();
+    supabase
+			.from("likes")
+			.select()
+			.eq("post_id", id)
+			.then((result) => setLikes(result.data));
+  }, [supabase]);
   
-  function fetchLikes() {
-    supabase.from('likes')
-    .select()
-    .eq('post_id', id)
-    .then(result =>
-      setLikes(result.data))
-  }
+  // function fetchLikes() {
+  //   supabase.from('likes')
+  //   .select()
+  //   .eq('post_id', id)
+  //   .then(result =>
+  //     setLikes(result.data))
+  // }
 
   const isLiked = !!likes.find(like => like.user_id === myProfile.id)
 
