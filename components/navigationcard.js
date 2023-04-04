@@ -50,6 +50,7 @@ export default function NavigationCard () {
         </svg>
         Notifications
         </Link>
+
         <button onClick={() => setIsChatOpen(true)} className="w-full -my-2">
           <span className={nonActiveElementClasses}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
@@ -59,7 +60,9 @@ export default function NavigationCard () {
         </span>
         </button>
         {isChatOpen && (
+          <div className="chat-wrapper fixed top-50 max-w-full left-10 w-full flex justify-start items-center z-50">
         <ChatGPT isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+        </div>
         )}
         
         <button onClick={logout} className=  "w-full -my-2">
