@@ -5,6 +5,7 @@ import AddHabitFormButton from "./AddHabitFormButton";
 import Card from "./card";
 import FriendInfo from "./friendinfo";
 import PostCard from "./postcard";
+import confetti from "canvas-confetti";
 
 export default function ProfileContent({ activeTab, userId }) {
 	const [posts, setPosts] = useState([]);
@@ -12,6 +13,7 @@ export default function ProfileContent({ activeTab, userId }) {
 	const [dayStarted, setDayStarted] = useState(false);
 	const [profile, setProfile] = useState(null);
 	const supabase = useSupabaseClient();
+
 	useEffect(() => {
 		if (!userId) {
 			return;
@@ -28,18 +30,22 @@ export default function ProfileContent({ activeTab, userId }) {
 			resetDay(userId);
 		}
 	}, [hour]);
-    useEffect(() => {
-        const changeInHabits = supabase
-        .channel('habit-change')
-        .on('postgres_changes', {
-            event: '*',
-            shchema: 'public',
-            table: 'habits'
-        }, (payload) => {
-            fetchUserHabits(userId);
-        }).subscribe();
-
-    }, [])
+	useEffect(() => {
+		const changeInHabits = supabase
+			.channel("habit-change")
+			.on(
+				"postgres_changes",
+				{
+					event: "*",
+					shchema: "public",
+					table: "habits"
+				},
+				(payload) => {
+					fetchUserHabits(userId);
+				}
+			)
+			.subscribe();
+	}, []);
 	async function resetDay(userId) {
 		// const habitData = await fetchUserHabits(userId);
 		const { data, error } = await supabase.from("habits").update([
@@ -75,7 +81,7 @@ export default function ProfileContent({ activeTab, userId }) {
 			.from("habits")
 			.select("habitName, isCompletedToday, id")
 			.eq("userId", userId)
-            .eq('isCompletedToday', false);
+			.eq("isCompletedToday", false);
 		if (!error) {
 			let habits = [];
 			for (let i = 0; i < data.length; i++) {
@@ -99,11 +105,42 @@ export default function ProfileContent({ activeTab, userId }) {
 			.eq("id", habitId)
 			.select();
 		if (!error) {
-			// do confetti animation to celebrate
 			setHabits(data);
 			setDayStarted(true);
 			const posted = await generatePost(userId, habitId);
 			if (posted) {
+				let duration = 5 * 1000;
+				let animationEnd = Date.now() + duration;
+				let defaults = {
+					startVelocity: 30,
+					spread: 360,
+					ticks: 60,
+					zIndex: 0
+				};
+
+				function randomInRange(min, max) {
+					return Math.random() * (max - min) + min;
+				}
+				let interval = setInterval(function () {
+					let timeLeft = animationEnd - Date.now();
+					if (timeLeft <= 0) {
+						return clearInterval(interval);
+					}
+					let particleCount = 50 * (timeLeft / duration);
+					// since particles fall down, start a bit higher than random
+					confetti(
+						Object.assign({}, defaults, {
+							particleCount,
+							origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+						})
+					);
+					confetti(
+						Object.assign({}, defaults, {
+							particleCount,
+							origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+						})
+					);
+				}, 250);
 				return true;
 			}
 		} else {
@@ -111,22 +148,22 @@ export default function ProfileContent({ activeTab, userId }) {
 		}
 	}
 
-    async function generatePost(userId, habitId) {
-        const habitName = await supabase
-        .from('habits')
-        .select('habitName')
-        .eq('id', habitId);
+	async function generatePost(userId, habitId) {
+		const habitName = await supabase
+			.from("habits")
+			.select("habitName")
+			.eq("id", habitId);
 
-        const { data, error } = await supabase
-        .from('posts')
-        .insert([{
-            content: `${habitName.data[0].habitName} ✅`,
-            author: userId
-        }])
-        if(!error){
-            return true;
-        }
-    }
+		const { data, error } = await supabase.from("posts").insert([
+			{
+				content: `${habitName.data[0].habitName} ✅`,
+				author: userId
+			}
+		]);
+		if (!error) {
+			return true;
+		}
+	}
 
 	return (
 		<div>
@@ -167,21 +204,29 @@ export default function ProfileContent({ activeTab, userId }) {
 				</div>
 			)}
 			{activeTab === "habits" && (
-				<div>
-                    <AddHabitFormButton />
+                <div>
+                    <div className='flex justify-between'>
+                        <h1 className='text-2xl'>Todays Habits</h1>
+					    <AddHabitFormButton />
+                    </div>
 					<Card>
 						{habits.length ? (
-							habits.map((habitObj) => (
-								<div key={nanoid()} className="flex flex-col ">
-									<h3>{habitObj.habitName}</h3>
-                                    <div className='flex'>
-									    <label className='ml-3 mr-2'>Mark done</label>
-									    <input type="checkbox" onChange={() => markHabitDone(habitObj.id)} />
-                                    </div>
-								</div>
-							))
+							<div>
+								{habits.map((habitObj) => (
+									<div key={nanoid()} className="flex flex-col ">
+										<h3>{habitObj.habitName}</h3>
+										<div className="flex">
+											<label className="ml-3 mr-2">Mark done</label>
+											<input
+												type="checkbox"
+												onChange={() => markHabitDone(habitObj.id)}
+											/>
+										</div>
+									</div>
+								))}
+							</div>
 						) : (
-							<h5>Add some habits you can stick to!</h5>
+							<h5>No habits are left for today!</h5>
 						)}
 					</Card>
 				</div>
