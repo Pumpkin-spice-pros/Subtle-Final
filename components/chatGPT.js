@@ -50,22 +50,22 @@ export function ChatGPT({ isOpen, onClose }) {
   return (
     <>
       {isOpen && (
-        <div className="" ref={chatRef}>
-          <button className={styles.closeButtonGPT} onClick={onClose}>
-            Close
-          </button>
-          <div className={styles.messagesGPT}>
+        <div className="border border-gray-400 p-4 rounded-lg shadow-lg absolute max-w-45 absolute -left-5 top-12 w-60" ref={chatRef}>
+          <div className="flex justify-center mt-w-45">
             {messages.map((message, index) => (
-              <div key={index}>
-                <span>{message.role}</span>
-                <span>{message.content}</span>
+              <div key={index} className="w-45">
+                <span className="max-w-md">{message.role}</span>
+                <span className="w-10">{message.content}</span>
               </div>
             ))}
           </div>
-          <div className={styles.inputGPT}>
-            <input value={input} onChange={(e) => setInput(e.target.value)} />
-            <button onClick={sendMessage}>Send</button>
+          <div className="flex justify-center max-w-45">
+            <input value={input} onChange={(e) => setInput(e.target.value)}  className="bg-gray-200 w-full max-w-md" />
           </div>
+          <button onClick={sendMessage} className="w-full mt-4 bg-emerald-500 text-white px-3 py-1 rounded-md ml-0 hover:bg-emerald-700">Send</button>
+          <button className="w-full mt-4 bg-gray-300 text-gray-700 px-3 py-1 rounded-md ml-0 hover:bg-gray-400" onClick={onClose}>
+            Close
+          </button>
         </div>
       )}
     </>
