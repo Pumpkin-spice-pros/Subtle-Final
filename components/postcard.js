@@ -263,23 +263,6 @@ function PostCard({ id, content, photos, profiles: authorProfile }) {
 	);
 }
 
-// export async function getServerSideProps(context){
-//   const session = useSession();
-//   const userId = session?.user?.id;
-//   const supabase = createServerSupabaseClient(context);
-//   const channel = supabase
-//   .channel('new-posts')
-//   .on('postgres_changes',
-//   {
-//     event: '*',
-//     schema: 'public',
-//     table: 'posts',
-//   }, (payload) => {
-//     if(payload.eventType === 'INSERT'){
-//       postcss.push(payload.new)
-//     }
-//   })
-//   .subscribe();
-// }
+
 
 export default PostCard;
