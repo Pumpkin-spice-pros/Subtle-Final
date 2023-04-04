@@ -5,7 +5,8 @@ import Layout from '@/components/layout'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import LoginPage from './login'
 import { useEffect, useState } from 'react'
-import { UserContext } from '@/contexts/usercontext'
+import { UserContext } from '@/contexts/usercontext';
+import { fetchPosts } from '@/utils/globalFunctions'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,9 +16,32 @@ export default function Home() {
   const [posts,setPosts] = useState([])
   const [profile,setProfile] =useState (null)
 
+  async function getPosts() {
+    const postData = await fetchPosts();
+    if(postData){
+      setPosts(postData)
+    }
+  }
   useEffect( () => {
-    fetchPosts();
+    getPosts();
   },[])
+
+  	useEffect(() => {
+			supabase
+				.channel("new-posts")
+				.on(
+					"postgres_changes",
+					{
+						event: "*",
+						schema: "public",
+						table: "posts"
+					},
+					(payload) => {
+						getPosts();
+					}
+				)
+				.subscribe();
+		}, []);
   
   useEffect( () => {
 
@@ -34,14 +58,14 @@ export default function Home() {
     })
   }, [session?.user?.id]);
 
-  function fetchPosts (){
-    supabase.from('posts')
-    .select('id,content, created_at, photos, profiles(id,avatar,name)')
-    .order('created_at', {ascending:false})
-    .then(result => {
-      setPosts(result.data);
-    })
-  }
+  // function fetchPosts (){
+  //   supabase.from('posts')
+  //   .select('id,content, created_at, photos, profiles(id,avatar,name)')
+  //   .order('created_at', {ascending:false})
+  //   .then(result => {
+  //     setPosts(result.data);
+  //   })
+  // }
 
 if(!session){
   return <LoginPage/>

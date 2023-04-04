@@ -12,7 +12,7 @@ export default function NavigationCard () {
     const supabase = useSupabaseClient();
     async function logout (){
       await supabase.auth.signOut();
-    } 
+    }
    
     return(
         <Card>
