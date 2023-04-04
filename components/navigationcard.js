@@ -1,17 +1,25 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Card from "./card"
+import { ChatGPT } from "/components/chatGPT.js";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useState } from "react";
 
 export default function NavigationCard () {
     const router = useRouter;
     const {asPath:pathname} = router
     const activeElementClasses = 'flex gap-2 py-3 bg-emerald-500 text-white -mx-10 px-10 rounded-md';
-    const nonActiveElementClasses = 'flex gap-3 py-2  my-2 hover:bg-emerald-200 -mx-4 px-4 rounded-md transition-all hover:scale-110 ';
+    const nonActiveElementClasses = 'flex gap-3 py-2  my-2 hover:bg-emerald-200 -mx-4 px-4 rounded-md transition-all hover:scale-110';
    
     const supabase = useSupabaseClient();
     async function logout (){
       await supabase.auth.signOut();
+    } 
+
+    const [isChatOpen, setIsChatOpen] = useState(false);
+
+    function toggleChat() {
+      setIsChatOpen((prevState) => !prevState);
     }
    
     return(
@@ -42,11 +50,23 @@ export default function NavigationCard () {
         </svg>
         Notifications
         </Link>
+        <button onClick={() => setIsChatOpen(true)} className="w-full -my-2">
+          <span className={nonActiveElementClasses}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M20 6.5c0-2.48-3.582-4.5-8-4.5s-8 2.02-8 4.5 3.582 4.5 8 4.5c2.283 0 4.362-.431 5.932-1.114m1.534-2.386A11.073 11.073 0 002 6.5c0 2.982 2.7 5.5 6 5.5 1.826 0 3.5-.546 4.776-1.388m5.946-2.112a11.073 11.073 0 00-3.53-1.114C18.362 3.02 16.283 2.5 14 2.5s-4.362.52-5.932 1.114A11.073 11.073 0 002 6.5c0 2.982 2.7 5.5 6 5.5a6.117 6.117 0 01.776-.388c.719-.204 1.492-.312 2.324-.312s1.605.108 2.324.312c.27.076.545.166.824.272A6.117 6.117 0 0118 12c3.3 0 6-2.518 6-5.5z"/>
+        </svg>
+        ChatGPT
+        </span>
+        </button>
+        {isChatOpen && (
+        <ChatGPT isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+        )}
+        
         <button onClick={logout} className=  "w-full -my-2">
           <span   className={nonActiveElementClasses}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-        </svg>          
+        </svg>
           Logout
           </span>
      
