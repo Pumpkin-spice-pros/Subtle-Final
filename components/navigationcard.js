@@ -53,9 +53,10 @@ export default function NavigationCard () {
 
         <button onClick={() => setIsChatOpen(true)} className="w-full -my-2">
           <span className={nonActiveElementClasses}>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M20 6.5c0-2.48-3.582-4.5-8-4.5s-8 2.02-8 4.5 3.582 4.5 8 4.5c2.283 0 4.362-.431 5.932-1.114m1.534-2.386A11.073 11.073 0 002 6.5c0 2.982 2.7 5.5 6 5.5 1.826 0 3.5-.546 4.776-1.388m5.946-2.112a11.073 11.073 0 00-3.53-1.114C18.362 3.02 16.283 2.5 14 2.5s-4.362.52-5.932 1.114A11.073 11.073 0 002 6.5c0 2.982 2.7 5.5 6 5.5a6.117 6.117 0 01.776-.388c.719-.204 1.492-.312 2.324-.312s1.605.108 2.324.312c.27.076.545.166.824.272A6.117 6.117 0 0118 12c3.3 0 6-2.518 6-5.5z"/>
-        </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+          </svg>
+
         ChatGPT
         </span>
         </button>

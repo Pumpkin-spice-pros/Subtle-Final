@@ -36,10 +36,12 @@ export function ChatGPT({ isOpen, onClose }) {
 
   const sendMessage = async () => {
     setIsLoading(true);
+
     const res = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
       messages: [{ role: 'user', content: input }],
     });
+
 
     setMessages([...messages, { role: 'user', content: input }]);
     setMessages([
