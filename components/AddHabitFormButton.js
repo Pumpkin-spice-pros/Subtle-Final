@@ -24,9 +24,9 @@ export default function AddHabitFormButton() {
   return (
 		<div>
 			<button
-				className="bg-emerald-500 rounded-xl h-10 w-20"
+				className="bg-emerald-500 rounded-xl h-10 w-40"
 				onClick={() => setDisplayed(!displayed)}>
-				{displayed ? "Cancel" : "Add habit"}
+				{displayed ? "Cancel" : "Add daily habit"}
 			</button>
 			{displayed && (
 				<form
@@ -34,12 +34,10 @@ export default function AddHabitFormButton() {
 						e.preventDefault();
 						makeHabit(userId);
 					}}
-					className="bg-gray-300 flex flex-col justify-between text-center absolute rounded-xl h-1/6 w-1/6">
-					<label className="pt-4" htmlFor="name">
-						Habit name
-					</label>
+					className="shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] bg-gray-200 mt-3 flex flex-col justify-around text-center absolute rounded-xl h-1/6 w-1/8">
 					<input
 						id="name"
+						placeholder="Habit name..."
 						className="h-1/4"
 						value={habitName}
 						onChange={(e) => setHabitName(e.target.value)}
