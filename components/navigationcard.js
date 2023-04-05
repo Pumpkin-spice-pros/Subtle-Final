@@ -6,14 +6,14 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useState } from "react";
 
 export default function NavigationCard () {
-    const router = useRouter;
+    const router = useRouter();
     const {asPath:pathname} = router
     const activeElementClasses = 'flex gap-2 py-3 bg-emerald-500 text-white -mx-10 px-10 rounded-md';
     const nonActiveElementClasses = 'flex gap-3 py-2  my-2 hover:bg-emerald-200 -mx-4 px-4 rounded-md transition-all hover:scale-110';
-   
     const supabase = useSupabaseClient();
     async function logout (){
       await supabase.auth.signOut();
+      router.push('/')
     } 
 
     const [isChatOpen, setIsChatOpen] = useState(false);

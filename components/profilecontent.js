@@ -156,7 +156,7 @@ export default function ProfileContent({ activeTab, userId }) {
 
 		const { data, error } = await supabase.from("posts").insert([
 			{
-				content: `${habitName.data[0].habitName} ✅`,
+				content: `Completed: ${habitName.data[0].habitName} ✅`,
 				author: userId
 			}
 		]);
@@ -214,7 +214,7 @@ export default function ProfileContent({ activeTab, userId }) {
 							<div>
 								{habits.map((habitObj) => (
 									<div key={nanoid()} className="flex flex-col ">
-										<h3>{habitObj.habitName}</h3>
+										<h3 className='text-2xl'>{habitObj.habitName}</h3>
 										<div className="flex">
 											<label className="ml-3 mr-2">Mark done</label>
 											<input
