@@ -4,8 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { UserContext } from "@/contexts/usercontext";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { useSession } from "@supabase/auth-helpers-react";
-import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+
 
 export default function PostCard({
 	id,
@@ -15,15 +14,14 @@ export default function PostCard({
 }) {
 	const [comments, setComments] = useState("");
 	const [commentText, setCommentText] = useState("");
+	const [showAll, setShowAll] = useState(false);
 	const { profile: myProfile } = useContext(UserContext);
 	const [likes, setLikes] = useState([]);
 	const supabase = useSupabaseClient();
-
 	useEffect(() => {
 		fetchLikes();
 		fetchComments();
 	}, []);
-
 	function fetchLikes() {
 		supabase
 			.from("likes")
@@ -31,9 +29,7 @@ export default function PostCard({
 			.eq("post_id", id)
 			.then((result) => setLikes(result.data));
 	}
-
 	const isLiked = !!likes.find((like) => like.user_id === myProfile.id);
-
 	function toggleLike() {
 		if (isLiked) {
 			supabase
@@ -57,7 +53,6 @@ export default function PostCard({
 				fetchLikes();
 			});
 	}
-
 	function postComment(ev) {
 		ev.preventDefault();
 		supabase
@@ -82,6 +77,7 @@ export default function PostCard({
 				setComments(result.data);
 			});
 	}
+	const visibleComments = showAll ? comments : comments.slice(0, 3);
 	return (
 		<Card>
 			<div className="flex gap-3">
@@ -169,27 +165,28 @@ export default function PostCard({
 						/>
 					</form>
 				</div>
-				{comments.length > 0 &&
-					comments.map((comment) => (
+				{visibleComments.length > 0 &&
+					visibleComments.map((comment) => (
 						<div className="mt-2 flex gap-2 items-center">
 							<Avatar url={comment.profiles.avatar} />
-							<div className=" bg-emerald-200 py-2 px-4 rounded-3xl">
+							<div className="bg-emerald-200 py-2 px-4 rounded-3xl">
 								<Link href={"/profile/" + comment.profiles.id}>
-									<span className=" block hover:underline font-semibold">
+									<span className="block hover:underline font-semibold">
 										{comment.profiles.name}
 									</span>
 								</Link>
-
 								<p className="text-sm">{comment.content}</p>
 							</div>
 						</div>
 					))}
+				{comments.length > 3 && (
+					<button
+						className="bg-emerald-500 text-white px-6 py-1 rounded-md  hover:underline mt-2"
+						onClick={() => setShowAll(!showAll)}>
+						{showAll ? "Hide comments" : "Show more comments"}
+					</button>
+				)}
 			</div>
 		</Card>
 	);
 }
-
-
-
-
-

@@ -34,7 +34,7 @@ export default function AddHabitFormButton() {
 						e.preventDefault();
 						makeHabit(userId);
 					}}
-					className="shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] bg-gray-200 mt-3 flex flex-col justify-around text-center absolute rounded-xl h-1/6 w-1/8">
+					className="border-solid border-2 border-black shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] bg-gray-200 mt-3 flex flex-col items-center justify-around text-center absolute rounded-xl h-1/6 w-1/6">
 					<input
 						id="name"
 						placeholder="Habit name..."
@@ -42,7 +42,7 @@ export default function AddHabitFormButton() {
 						value={habitName}
 						onChange={(e) => setHabitName(e.target.value)}
 					/>
-					<button className="bg-emerald-500 rounded-xl w-100">Add</button>
+					<button className="bg-emerald-500 rounded-xl w-1/2">Add</button>
 				</form>
 			)}
 		</div>
